@@ -15,7 +15,7 @@ import java.util.Map;
 
 @ControllerAdvice
 @ResponseStatus
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
+public class GlobalExceptionHandler{
     @ExceptionHandler(value = IdNotFoundException.class)
     public ResponseEntity<ErrorMessage> handleException(IdNotFoundException ex){
         ErrorMessage error = new ErrorMessage(HttpStatus.NOT_FOUND,ex.getMessage());
@@ -28,6 +28,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
    }
 
+   @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+        return ResponseEntity.badRequest().body(errors);
+    }
 
 
 

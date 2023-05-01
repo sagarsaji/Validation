@@ -19,7 +19,7 @@ public class ControllerPractice {
     @Autowired
     public ServicePractice services;
     @PostMapping("/emp")
-    public ResponseEntity<EntityPractice> post(@Valid @RequestBody EntityRequest request){
+    public ResponseEntity<EntityPractice> post(@RequestBody @Valid EntityRequest request){
         return new ResponseEntity<>(services.postemp(request), HttpStatus.CREATED);
     }
     @GetMapping("/emp1")
